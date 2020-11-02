@@ -2,20 +2,24 @@ import java.util.*
 
 // Complete the minimumBribes function below.
 fun minimumBribes(q: IntArray): Int? {
-    var bribes = 0
-    while (true) {
-        var maxIndexNotInPlace = maxIndexNotInPlace(q) ?: return bribes
-        val maxValue = q[maxIndexNotInPlace]
-        val indexDiff = (maxValue - 1) - maxIndexNotInPlace
-        if (indexDiff > 2) {
-            return null
-        }
-        repeat(indexDiff) {
-            q.swap(maxIndexNotInPlace, maxIndexNotInPlace + 1)
-            maxIndexNotInPlace += 1
-        }
-        bribes += indexDiff
+    val isChaotic = q.mapIndexed { i, value -> i to value }.any { (i, value) -> (value - 1) - i > 2 }
+    if (isChaotic) {
+        return null
     }
+
+    var bribes = 0
+    do {
+        var changed = false
+        for (i in q.indices) {
+            val value = q[i]
+            if (value - 1 != i && value > q[i + 1]) {
+                q.swap(i, i + 1)
+                bribes += 1
+                changed = true
+            }
+        }
+    } while (changed)
+    return bribes
 }
 
 fun IntArray.swap(i: Int, j: Int) {
@@ -23,13 +27,6 @@ fun IntArray.swap(i: Int, j: Int) {
     this[j] = this[i]
     this[i] = t
 }
-
-fun maxIndexNotInPlace(q: IntArray): Int? = q.asSequence()
-        .mapIndexed { i, value -> i to value }
-        .filter { (i, value) -> i + 1 != value }
-        .maxBy { it.second }
-        ?.first
-
 
 fun main() {
     val scan = Scanner(System.`in`)
