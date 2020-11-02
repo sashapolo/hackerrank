@@ -15,13 +15,13 @@ fun repeatedString(s: String, n: Long): Long {
 }
 
 private fun countSymbols(s: String, limit: Int = s.length): Long =
-    s.asSequence()
-        .take(limit)
-        .count { it == 'a' }
-        .toLong()
+        s.asSequence()
+                .take(limit)
+                .count { it == 'a' }
+                .toLong()
 
 
-fun main(args: Array<String>) {
+fun main() {
     val scan = Scanner(System.`in`)
 
     val s = scan.nextLine()
